@@ -12,15 +12,24 @@
 <body>
   <div id="root"></div>
   <script type="module">
-    // The bundled app was built to load eight files from /assets/.
-    // The GitHub repository keeps those files alongside index.html.
-    // Rewrite these references in memory, without modifying index.js.
+    // This compiled app expects its entry route at "/" and images/data at "/assets/".
+    // GitHub Pages serves it under "/map-test/", with all assets in that folder.
+    // Apply both fixes while loading index.js, without changing that original bundle.
     const scriptUrl = new URL('./index.js', document.baseURI);
     const response = await fetch(scriptUrl);
-    if (!response.ok) throw new Error(`Could not load index.js: HTTP ${response.status}`);
-    const source = await response.text();
-    const patchedSource = source.replaceAll('/assets/', './');
-    const moduleUrl = URL.createObjectURL(new Blob([patchedSource], { type: 'text/javascript' }));
+    if (!response.ok) throw new Error(`Unable to load index.js (HTTP ${response.status})`);
+
+    let source = await response.text();
+    source = source.replaceAll('/assets/', './');
+
+    const basePath = location.pathname.startsWith('/map-test/') ? '/map-test/' : '/';
+    const originalRoute = 'path:"/",component:vU';
+    if (!source.includes(originalRoute)) {
+      throw new Error('Could not locate the app home route in index.js');
+    }
+    source = source.replace(originalRoute, `path:"${basePath}",component:vU`);
+
+    const moduleUrl = URL.createObjectURL(new Blob([source], { type: 'text/javascript' }));
     try {
       await import(moduleUrl);
     } finally {
