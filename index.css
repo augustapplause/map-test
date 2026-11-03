@@ -118,3 +118,59 @@
   width: 100%;
   min-width: 0;
 }
+
+
+/* Store Explorer v15: wider map tools and prominent Map refresh action. */
+.map-toolbar-row > button:nth-child(n + 3) {
+  width: 106px !important;
+  min-width: 106px !important;
+  flex: 0 0 106px !important;
+}
+
+.map-toolbar-row > button[data-testid="button-map-refresh"] {
+  color: #ffffff !important;
+  background: #398b57 !important;
+  border: 1px solid #2e7548 !important;
+  box-shadow: 0 3px 0 #245f3a, 0 4px 7px rgba(0, 0, 0, 0.16) !important;
+  transform: translateY(0);
+  transition: background-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+}
+
+.map-toolbar-row > button[data-testid="button-map-refresh"]:hover:not(:disabled) {
+  background: #317b4c !important;
+  box-shadow: 0 4px 0 #245f3a, 0 6px 9px rgba(0, 0, 0, 0.18) !important;
+  transform: translateY(-1px);
+}
+
+.map-toolbar-row > button[data-testid="button-map-refresh"]:active:not(:disabled) {
+  background: #286c41 !important;
+  box-shadow: 0 1px 0 #245f3a, 0 2px 4px rgba(0, 0, 0, 0.16) !important;
+  transform: translateY(2px);
+}
+
+.map-toolbar-row > button[data-testid="button-map-refresh"][data-refresh-state="running"] {
+  color: #ffffff !important;
+  background: #dc2626 !important;
+  border-color: #b91c1c !important;
+  box-shadow: 0 3px 0 #991b1b, 0 4px 7px rgba(0, 0, 0, 0.16) !important;
+}
+
+.map-toolbar-row > button[data-testid="button-map-refresh"][data-refresh-state="running"]:hover:not(:disabled) {
+  background: #c81e1e !important;
+}
+
+@media (max-width: 1120px) {
+  .map-toolbar-row > button:nth-child(n + 3) {
+    width: 106px !important;
+    min-width: 106px !important;
+    flex-basis: 106px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .map-toolbar-row > button:nth-child(n + 3) {
+    width: 106px !important;
+    min-width: 106px !important;
+    flex-basis: 106px !important;
+  }
+}
