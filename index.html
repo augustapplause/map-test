@@ -1,16 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <link rel="icon" type="image/png" href="./favicon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="./index.js"></script>
-    <link rel="stylesheet" crossorigin href="./index.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <link rel="icon" type="image/png" href="./favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./index.css" />
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module">
+    // The bundled app was built to load eight files from /assets/.
+    // The GitHub repository keeps those files alongside index.html.
+    // Rewrite these references in memory, without modifying index.js.
+    const scriptUrl = new URL('./index.js', document.baseURI);
+    const response = await fetch(scriptUrl);
+    if (!response.ok) throw new Error(`Could not load index.js: HTTP ${response.status}`);
+    const source = await response.text();
+    const patchedSource = source.replaceAll('/assets/', './');
+    const moduleUrl = URL.createObjectURL(new Blob([patchedSource], { type: 'text/javascript' }));
+    try {
+      await import(moduleUrl);
+    } finally {
+      URL.revokeObjectURL(moduleUrl);
+    }
+  </script>
+</body>
 </html>
