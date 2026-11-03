@@ -530,12 +530,14 @@ const Re=new Map;Ee.forEach(Oe=>{if(Oe.place_id&&!Re.has(Oe.place_id)){const se=
       if(fresh.length)acceptPage(fresh,center);
     },
     success=>{
-      if(success)finish();
-      else{
-        _(!1);
-        const session=refreshTracker.current;
-        if(session&&session.id===token)session.complete('pharmacy',false);
-      }
+      // Complete the pharmacy entry in the active refresh tracker for both
+      // successful searches (including ZERO_RESULTS) and failed searches.
+      // The previous success branch called an undefined finish() function,
+      // leaving pharmacy marked as pending until the refresh timed out.
+      if(token!==ct.current)return;
+      _(!1);
+      const session=refreshTracker.current;
+      if(session&&session.id===token)session.complete('pharmacy',Boolean(success));
     },
     ()=>token===ct.current,
     3
